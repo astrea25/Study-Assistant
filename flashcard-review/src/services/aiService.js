@@ -68,7 +68,6 @@ class AIService {
         }
       );
       
-      // Extract and parse the JSON from the response
       try {
         const text = response.data.candidates[0].content.parts[0].text;
         const jsonMatch = text.match(/\[[\s\S]*\]/);
@@ -89,8 +88,8 @@ class AIService {
 
   extractJSON(responseText) {
     const cleanText = responseText
-      .replace(/```json\n?|\n?```/g, '')  // Remove markdown
-      .replace(/\n\s*/g, '')              // Remove newlines and extra spaces
+      .replace(/```json\n?|\n?```/g, '')
+      .replace(/\n\s*/g, '')
       .trim();
     
     try {
@@ -122,11 +121,11 @@ class AIService {
 
                 Generate detailed notes following this:
 
-                Objective: To analyze a PDF document and generate comprehensive and insightful notes tailored to the document’s content and intent. 
+                Objective: To analyze a PDF document and generate comprehensive and insightful notes tailored to the document's content and intent. 
 
                 INPUT: - PDF Document, Text Transcript
 
-                Process: Intent Identification: Automatic Identification: Analyse the input for keywords, phrases, and structural elements to determine the pdf’s intent. 
+                Process: Intent Identification: Automatic Identification: Analyse the input for keywords, phrases, and structural elements to determine the pdf's intent. 
 
                 Content Analysis & Note Generation: Course Lecture: Employ a tiered note-taking structure (e.g., outlining, bullet points) to capture key concepts, supporting ideas, and examples. Identify important definitions, formulas, and diagrams for inclusion. Create a summary section to synthesize main points. Deep Dive: Divide the notes into relevant sections based on the explored subtopics. Highlight key arguments, evidence, and counterpoints presented. Include relevant quotes and citations. 
 

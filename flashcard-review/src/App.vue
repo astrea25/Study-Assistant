@@ -1,4 +1,3 @@
-<!-- src/App.vue -->
 <template>
   <div class="min-h-screen bg-light">
     <Navbar />
@@ -20,5 +19,4 @@ export default {
 </script>
 
 <style>
-/* ... any existing styles ... */
 </style>
