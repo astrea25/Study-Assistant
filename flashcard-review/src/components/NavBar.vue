@@ -2,7 +2,7 @@
 <template>
     <nav class="bg-dark text-light p-4">
       <div class="container mx-auto flex justify-between items-center">
-        <router-link to="/" class="text-xl font-bold">PDF Learning App</router-link>
+        <router-link to="/" class="text-xl font-bold">Study Assistant</router-link>
         
         <div class="hidden md:flex space-x-4">
           <router-link to="/" class="hover:text-secondary transition-colors" 
