@@ -133,7 +133,7 @@ class AIService {
 
                 Motivational Talk: Identify and extract motivational quotes and impactful statements. Capture the speaker's main message and key takeaways. Summarize inspiring stories or anecdotes shared. 
 
-                Output: Structured Notes: Present the generated notes in a clear and organized format based on the identified intent and content analysis. This may include headings, subheadings, bullet points, numbered lists, and other formatting elements. Present it in a markdown format.
+                Output: Structured Notes: Present the generated notes in a clear and organized format based on the identified intent and content analysis. This may include headings, subheadings, bullet points, numbered lists, and other formatting elements. Format the output in a neat, and clean manner. No need for the confirmation message, jump straight to the notes.
 
               ${content}`
             }]
