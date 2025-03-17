@@ -47,25 +47,6 @@ A modern web application built with Vue.js that helps students study more effect
 - Node.js (v14 or higher)
 - Google API key for Gemini Pro
 
-## Dependencies
-
-### Core Dependencies
-- vue: ^3.4.15
-- vuex: ^4.1.0
-- vue-router: ^4.2.5
-- axios: ^1.6.7
-- pdfjs-dist: ^4.0.379
-
-### Development Dependencies
-- @vitejs/plugin-vue: ^5.0.3
-- vite: ^5.0.11
-
-### CDN Dependencies
-- Tailwind CSS
-- Markdown-it
-- Highlight.js
-- GitHub Markdown CSS
-
 ## Setup
 
 1. Clone the repository:
@@ -74,21 +55,21 @@ git clone https://github.com/yourusername/study-assistant.git
 cd study-assistant
 ```
 
-2. Install dependencies:
+2. Install dependencies for running frontend and backend concurrently:
 ```bash
 npm install
+```
+
+3. Install dependencies for the frontend server:
+```bash
+cd flashcard-review
+npm install
+cd ..
 ```
 
 3. Start the development server:
 ```bash
 npm run dev
-```
-
-4. Run the backend server:
-```bash
-cd ..
-cd pdf-backend
-node server.js
 ```
 
 4. Open your browser and navigate to `http://localhost:5173` to access the application.
@@ -119,8 +100,6 @@ node server.js
    - Select study material
    - Choose question types
    - Generate and take the test
-
-## Project Structure
 
 
 
