@@ -45,7 +45,7 @@ A modern web application built with Vue.js that helps students study more effect
 ## Prerequisites
 
 - Node.js (v14 or higher)
-- Google API key for Gemini Pro
+- Google API key
 
 ## Setup
 
