@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "pdf-backend/server.js",
+      "src": "pdf-backend/api.js",
       "use": "@vercel/node"
     },
     {
