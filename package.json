@@ -3,6 +3,6 @@
     "concurrently": "^9.1.2"
   },
   "scripts": {
-    "dev": "concurrently \"cd pdf-backend && node server.js\" \"cd flashcard-review && npm run dev\""
+    "dev": "concurrently \"cd pdf-backend && node local.js\" \"cd flashcard-review && npm run dev\""
   }
 }

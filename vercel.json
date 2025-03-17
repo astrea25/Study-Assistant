@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "pdf-backend/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "flashcard-review/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "pdf-backend/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "flashcard-review"
+    }
+  ]
+}
