@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "pdf-backend/api.js",
+      "src": "pdf-backend/api/index.js",
       "use": "@vercel/node"
     },
     {
@@ -13,7 +13,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "pdf-backend/api.js"
+      "dest": "pdf-backend/api/index.js"
     },
     {
       "src": "/(.*)",
