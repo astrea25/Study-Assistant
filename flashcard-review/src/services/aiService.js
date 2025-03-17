@@ -16,11 +16,10 @@ class AIService {
   getApiKey() {
     return this.apiKey;
   }
-
   async generateFlashcards(content) {
     try {
       const response = await axios.post(
-        `${this.baseURL}/models/gemini-2.0-flash:generateContent?key=${this.apiKey}`,
+        `${this.baseURL}/models/gemma-3-27b-it:generateContent?key=${this.apiKey}`,
         {
           contents: [
             {
