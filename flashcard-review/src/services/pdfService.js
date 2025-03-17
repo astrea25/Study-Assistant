@@ -5,7 +5,9 @@ class PDFService {
       formData.append('pdfFile', file);
   
       try {
-        const response = await fetch('http://localhost:5000/extract-text', {
+        const API_URL = "https://pdf-reader-neon.vercel.app/" || "http://localhost:5000";
+
+        const response = await fetch(`${API_URL}/extract-text`, {
           method: 'POST',
           body: formData
         });
