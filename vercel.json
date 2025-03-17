@@ -13,7 +13,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "pdf-backend/server.js"
+      "dest": "pdf-backend/api.js"
     },
     {
       "src": "/(.*)",
