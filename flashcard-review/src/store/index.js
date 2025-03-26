@@ -9,7 +9,8 @@ export default createStore({
     quiz: [],
     notes: null,
     isProcessing: false,
-    error: null
+    error: null,
+    apiType: localStorage.getItem('ai_api_type') || 'google'
   },
   mutations: {
     ADD_PDF(state, pdfData) {
@@ -32,6 +33,10 @@ export default createStore({
     },
     SET_NOTES(state, notes) {
       state.notes = notes;
+    },
+    SET_API_TYPE(state, type) {
+      state.apiType = type;
+      localStorage.setItem('ai_api_type', type);
     }
   },
   actions: {
@@ -118,7 +123,16 @@ export default createStore({
         commit('SET_PROCESSING', false);
       }
     },
-    updateApiKey({ commit }, apiKey) {
+    updateApiType({ commit }, type) {
+      try {
+        openaiService.setApiType(type);
+        commit('SET_API_TYPE', type);
+        commit('SET_ERROR', null);
+      } catch (error) {
+        commit('SET_ERROR', error.message);
+      }
+    },
+    updateApiKey({ commit, state }, apiKey) {
       try {
         openaiService.setApiKey(apiKey);
         commit('SET_ERROR', null);
@@ -147,7 +161,12 @@ export default createStore({
     hasPdf: state => state.pdfs.length > 0,
     pdfCount: state => state.pdfs.length,
     allPdfs: state => state.pdfs,
-    isApiKeySet: () => !!openaiService.getApiKey(),
+    isApiKeySet: (state) => {
+      const apiKey = openaiService.getApiKey();
+      const apiType = state.apiType;
+      return !!apiKey && apiKey.trim() !== '';
+    },
+    currentApiType: state => state.apiType,
     hasFlashcards: state => state.flashcards.length > 0,
     hasQuiz: state => state.quiz.length > 0,
     hasNotes: state => !!state.notes

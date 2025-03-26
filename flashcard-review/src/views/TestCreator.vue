@@ -147,9 +147,19 @@
               </div>
 
               <!-- Correct Answer Display -->
-              <div v-if="showAnswers" class="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
-                <p class="text-green-700">
-                  <span class="font-semibold">Correct Answer:</span> 
+              <div v-if="showAnswers"
+                :class="[
+                  'mt-4 p-3 rounded-md',
+                  isAnswerCorrect(index)
+                    ? 'bg-green-50 border border-green-200'
+                    : 'bg-red-50 border border-red-200'
+                ]">
+                <p :class="[
+                  isAnswerCorrect(index)
+                    ? 'text-green-700'
+                    : 'text-red-700'
+                ]">
+                  <span class="font-semibold">Correct Answer:</span>
                   {{ question.correct_answer }}
                 </p>
               </div>
@@ -222,8 +232,14 @@
       const getAnswerClass = (option, correctAnswer, questionIndex) => {
         if (!showAnswers.value) return '';
         
-        const isSelected = userAnswers.value[questionIndex] === option;
-        const isCorrect = option === correctAnswer;
+        const userAnswer = userAnswers.value[questionIndex];
+        // Convert both to lowercase for case-insensitive comparison
+        const normalizedOption = option.toString().toLowerCase();
+        const normalizedUserAnswer = userAnswer ? userAnswer.toString().toLowerCase() : '';
+        const normalizedCorrectAnswer = correctAnswer.toString().toLowerCase();
+        
+        const isSelected = normalizedUserAnswer === normalizedOption;
+        const isCorrect = normalizedOption === normalizedCorrectAnswer;
         
         if (isSelected && isCorrect) return 'text-green-700 font-semibold';
         if (isSelected && !isCorrect) return 'text-red-700 font-semibold';
@@ -249,6 +265,15 @@
         generateQuiz();
       }
       
+      const isAnswerCorrect = (questionIndex) => {
+        const userAnswer = userAnswers.value[questionIndex];
+        const correctAnswer = quiz.value[questionIndex].correct_answer;
+        
+        if (!userAnswer) return false;
+        
+        return userAnswer.toString().toLowerCase() === correctAnswer.toString().toLowerCase();
+      };
+
       return {
         selectedTypes,
         showAnswers,
@@ -261,6 +286,7 @@
         toggleAnswers,
         getAnswerClass,
         formatQuestionType,
+        isAnswerCorrect,
         hasPdf: computed(() => store.getters.hasPdf),
         hasQuiz: computed(() => store.getters.hasQuiz),
         isProcessing: computed(() => store.state.isProcessing),

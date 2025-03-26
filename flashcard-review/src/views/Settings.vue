@@ -1,106 +1,182 @@
-<!-- src/views/Settings.vue -->
 <template>
-    <div>
-      <h1 class="text-3xl font-bold text-dark mb-6">Settings</h1>
-      
-      <div class="card">
-        <h2 class="text-xl font-semibold mb-4">OpenAI API Configuration</h2>
-        
-        <div class="mb-4">
-          <label for="apiKey" class="block text-sm font-medium text-gray-700 mb-1">
-            API Key
-          </label>
-          <div class="flex">
+  <div class="max-w-2xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-8">Settings</h1>
+
+    <div class="card p-6 mb-8">
+      <h2 class="text-xl font-semibold mb-4">AI Service Configuration</h2>
+
+      <!-- API Type Selection -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Select AI Service
+        </label>
+        <div class="flex gap-4">
+          <label class="inline-flex items-center">
             <input
-              :type="showApiKey ? 'text' : 'password'"
-              id="apiKey"
-              v-model="apiKey"
-              class="input rounded-r-none"
-              placeholder="Enter your OpenAI API key"
+              type="radio"
+              class="form-radio"
+              name="api-type"
+              value="google"
+              :checked="apiType === 'google'"
+              @change="handleApiTypeChange('google')"
             />
-            <button
-              @click="toggleApiKeyVisibility"
-              class="px-3 border border-l-0 border-gray-300 rounded-r-md bg-gray-50"
-            >
-              <svg v-if="showApiKey" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-              </svg>
-              <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd" />
-                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
-              </svg>
-            </button>
-          </div>
-          <p class="mt-1 text-sm text-gray-500">
-            Your API key is stored locally in your browser and never sent to our servers.
-          </p>
+            <span class="ml-2">Google AI</span>
+            <span v-if="hasGoogleKey" class="ml-2 text-sm text-green-600">
+              (Key saved ✓)
+            </span>
+          </label>
+          <label class="inline-flex items-center">
+            <input
+              type="radio"
+              class="form-radio"
+              name="api-type"
+              value="openai"
+              :checked="apiType === 'openai'"
+              @change="handleApiTypeChange('openai')"
+            />
+            <span class="ml-2">OpenAI</span>
+            <span v-if="hasOpenAIKey" class="ml-2 text-sm text-green-600">
+              (Key saved ✓)
+            </span>
+          </label>
         </div>
-        
-        <div class="mt-6">
-          <button @click="saveApiKey" class="btn btn-primary">Save API Key</button>
-        </div>
-        
-        <div v-if="apiKeySaved" class="mt-4 p-3 bg-green-100 text-green-700 rounded-md">
+      </div>
+
+      <!-- API Key Input -->
+      <div class="mb-6">
+        <!-- Success Message -->
+        <div v-if="showSaveSuccess" class="mb-4 p-2 bg-green-50 text-green-700 rounded-md flex items-center">
+          <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
           API key saved successfully!
         </div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          {{ apiType === 'google' ? 'Google AI API Key' : 'OpenAI API Key' }}
+        </label>
+        <input
+          type="password"
+          v-model="apiKey"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+          :placeholder="`Enter your ${apiType === 'google' ? 'Google AI' : 'OpenAI'} API key`"
+        />
       </div>
-      
-      <div class="mt-8 card">
-        <h2 class="text-xl font-semibold mb-4">About This App</h2>
-        <p class="mb-2">
-          This application uses the OpenAI API to convert PDF documents into interactive
-          learning materials such as flashcards and quizzes.
-        </p>
-        <p class="mb-2">
-          The app processes your documents locally, and only sends the text content to OpenAI's API
-          for generating the learning materials. Your original PDFs are never uploaded to any server.
-        </p>
-        <p>
-          To use this app, you need to provide your own OpenAI API key in the settings above.
-        </p>
+
+      <!-- Save Button -->
+      <button
+        @click="saveSettings"
+        class="w-full bg-primary text-white rounded-md py-2 px-4 hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+      >
+        Save Settings
+      </button>
+    </div>
+
+    <!-- API Key Instructions -->
+    <div class="bg-gray-50 rounded-lg p-6">
+      <h3 class="text-lg font-medium mb-4">How to Get Your API Key</h3>
+      <div v-if="apiType === 'google'">
+        <h4 class="font-medium mb-2">Google AI API Key:</h4>
+        <ol class="list-decimal list-inside space-y-2 text-gray-600">
+          <li>Visit the <a href="https://makersuite.google.com/app/apikey" target="_blank" class="text-primary hover:underline">Google AI Studio</a></li>
+          <li>Sign in with your Google account</li>
+          <li>Create a new API key or use an existing one</li>
+          <li>Copy and paste the API key above</li>
+        </ol>
+      </div>
+      <div v-else>
+        <h4 class="font-medium mb-2">OpenAI API Key:</h4>
+        <ol class="list-decimal list-inside space-y-2 text-gray-600">
+          <li>Visit <a href="https://platform.openai.com/account/api-keys" target="_blank" class="text-primary hover:underline">OpenAI's API Keys page</a></li>
+          <li>Sign in to your OpenAI account</li>
+          <li>Click "Create new secret key"</li>
+          <li>Copy and paste the API key above</li>
+        </ol>
       </div>
     </div>
-  </template>
-  
-  <script>
-  import { ref, onMounted } from 'vue';
-  import { useStore } from 'vuex';
-  import openaiService from '@/services/aiService';
-  
-  export default {
-    name: 'Settings',
-    setup() {
-      const store = useStore();
-      const apiKey = ref('');
-      const showApiKey = ref(false);
-      const apiKeySaved = ref(false);
-      
-      onMounted(() => {
-        apiKey.value = openaiService.getApiKey() || '';
-      });
-      
-      const toggleApiKeyVisibility = () => {
-        showApiKey.value = !showApiKey.value;
-      };
-      
-      const saveApiKey = () => {
+  </div>
+</template>
+
+<script>
+import { ref, computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
+
+export default {
+  name: 'Settings',
+  setup() {
+    const store = useStore();
+    const apiKey = ref('');
+    const showSaveSuccess = ref(false);
+    const apiType = computed(() => store.getters.currentApiType);
+    const hasGoogleKey = ref(false);
+    const hasOpenAIKey = ref(false);
+
+    // Check if API keys exist for each service
+    onMounted(() => {
+      const googleKey = localStorage.getItem('google_api_key');
+      const openaiKey = localStorage.getItem('openai_api_key');
+      hasGoogleKey.value = !!googleKey;
+      hasOpenAIKey.value = !!openaiKey;
+    });
+
+    const handleApiTypeChange = (type) => {
+      store.dispatch('updateApiType', type);
+      apiKey.value = localStorage.getItem(`${type}_api_key`) || '';
+    };
+
+    const saveSettings = () => {
+      if (apiKey.value.trim()) {
         store.dispatch('updateApiKey', apiKey.value);
-        apiKeySaved.value = true;
-        
-        // Hide success message after 3 seconds
+        if (apiType.value === 'google') {
+          hasGoogleKey.value = true;
+        } else {
+          hasOpenAIKey.value = true;
+        }
+        showSaveSuccess.value = true;
         setTimeout(() => {
-          apiKeySaved.value = false;
+          showSaveSuccess.value = false;
         }, 3000);
-      };
-      
-      return {
-        apiKey,
-        showApiKey,
-        apiKeySaved,
-        toggleApiKeyVisibility,
-        saveApiKey
-      };
-    }
+      }
+    };
+
+    return {
+      apiKey,
+      apiType,
+      handleApiTypeChange,
+      saveSettings,
+      showSaveSuccess,
+      hasGoogleKey,
+      hasOpenAIKey
+    };
   }
-  </script>
+};
+</script>
+
+<style scoped>
+.card {
+  @apply bg-white rounded-lg shadow border border-gray-200;
+}
+
+.form-radio {
+  @apply h-4 w-4 text-primary border-gray-300 focus:ring-primary;
+}
+
+.text-primary {
+  @apply text-blue-600;
+}
+
+.bg-primary {
+  @apply bg-blue-600;
+}
+
+.bg-primary-dark {
+  @apply bg-blue-700;
+}
+
+.focus\:ring-primary:focus {
+  @apply ring-blue-500;
+}
+
+.focus\:border-primary:focus {
+  @apply border-blue-500;
+}
+</style>
