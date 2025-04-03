@@ -224,7 +224,7 @@ class AIService {
 
       if (this.apiType === 'google') {
         response = await axios.post(
-          `${this.baseURL}/models/gemini-2.0-flash:generateContent?key=${this.apiKey}`,
+          `${this.baseURL}/models/gemini-2.5-pro-exp-03-25:generateContent?key=${this.apiKey}`,
           {
             contents: [{
               parts: [{ text: prompt }]
